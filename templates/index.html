@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <!--From https://codepen.io/frytyler/pen/EGdtg-->
+  <head>
+    <meta charset="UTF-8" />
+    <title>Prediksi Produk Laku</title>
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="container contact-form">
+      <div class="contact-image">
+        <img
+          src="{{ url_for('static', filename='img/gambar.jpg') }}"
+          alt="rocket_contact"
+        />
+      </div>
+      <form action="{{ url_for('predict')}}" method="post">
+        <h3>Prediksi Produk Laku</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <input
+                type="text"
+                name="Bahan"
+                class="form-control"
+                placeholder="Bahan"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                name="Harga"
+                class="form-control"
+                placeholder="Harga"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                name="Rating"
+                class="form-control"
+                placeholder="Rating"
+                required="required"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                name="Jumlah Terjual"
+                class="form-control"
+                placeholder="Jumlah Terjual"
+                required="required"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-large">
+              Predict
+            </button>
+          </div>
+          <div class="col-md-6">
+            <h3>
+              Hasil Prediksi : <br />
+              {% if prediction_text == '[1]' %}
+                <p>Tidak Laku</p>
+              {% elif prediction_text == '[0]' %}
+                <p>Laku</p>
+              {% endif %}
+            </h3>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </body>
+</html>
