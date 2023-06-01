@@ -47,6 +47,20 @@
                     </h3>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <h3>Alasan: <br/>
+                        {% if 'x8100' in top_features %}
+                            <p>Harga Mahal</p>
+                        {% elif 'x8101' in top_features %}
+                            <p>Susunan Kurang</p>
+                        {% elif 'x8102' in top_features %}
+                            <p>Bahan ganti yang lain</p>
+                        {% endif %}
+                    </h3>                    
+                </div>
+            </div>
         </form>
     </div>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>

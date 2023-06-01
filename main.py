@@ -4,11 +4,16 @@ import numpy as np
 from skimage.feature import hog
 from sklearn.preprocessing import StandardScaler
 import os
-import shutil
+import shutil, shap
 import pickle
+import numba
+
+
 
 app = Flask(__name__)
 model = pickle.load(open("model_xgboost_31.pkl", "rb"))
+# Inisialisasi objek explainer SHAP dengan model yang sudah dilatih
+explainer = shap.Explainer(model)
 
 def extract_features(images):
     features_list = []
@@ -85,9 +90,24 @@ def predict():
     # Apply StandardScaler to scale all input features
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(combined_features)
+    feature_names = scaler.get_feature_names_out()   
+
+    # Calculate SHAP values for the scaled features
+    shap_values = explainer(scaled_features)
+
+    # Get the feature importance values for each image
+    feature_importance = np.abs(shap_values.values).mean(axis=0)
+
+    # Sort the feature importance values in descending order
+    sorted_indices = np.argsort(feature_importance)[::-1]
+
+    # Get the top N features and their names
+    top_features_indices = sorted_indices[:8104] 
+    # Get the top features and their names
+    top_features_names = [feature_names[i] for i in top_features_indices if feature_names[i] in ['x8101', 'x8102', 'x8103']]
     
     prediction = model.predict(scaled_features)
-    return render_template("index_coba.html", prediction_text="{}".format(prediction))
+    return render_template("index_coba.html", prediction_text="{}".format(prediction), top_features = top_features_names)
 
 if __name__ == '__main__':
     app.run(debug=True)
