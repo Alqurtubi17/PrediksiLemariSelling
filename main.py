@@ -4,11 +4,9 @@ import numpy as np
 from skimage.feature import hog
 from sklearn.preprocessing import StandardScaler
 import os
-import shutil, shap
+import shutil, shap, joblib
 import pickle
 import numba
-
-
 
 app = Flask(__name__)
 model = pickle.load(open("model_xgboost_31.pkl", "rb"))
@@ -88,8 +86,8 @@ def predict():
     # Combine the features and additional features arrays
     combined_features = np.concatenate((features, additional_features), axis=1)
     # Apply StandardScaler to scale all input features
-    scaler = StandardScaler()
-    scaled_features = scaler.fit_transform(combined_features)
+    scaler = joblib.load('D:/CupboardSellingRecomendation/scaler.joblib')
+    scaled_features = scaler.transform(combined_features)
     feature_names = scaler.get_feature_names_out()   
 
     # Calculate SHAP values for the scaled features
